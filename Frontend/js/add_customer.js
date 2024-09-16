@@ -20,7 +20,7 @@ document.getElementById('addCustomerForm').addEventListener('submit', async func
         },
         body: JSON.stringify(customer)
     });
-
+    console.log("response: ",response);
     if (response.ok) {
         window.location.href = 'customers.html';
     } else {
