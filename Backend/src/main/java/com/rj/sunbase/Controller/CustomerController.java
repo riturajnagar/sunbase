@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
+@CrossOrigin(origins = "http://localhost:5500")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
+    @CrossOrigin(origins = "http://localhost:5500")
     @PostMapping("/create")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.createCustomer(customer));
