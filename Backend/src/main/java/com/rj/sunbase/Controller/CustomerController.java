@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
+@CrossOrigin(origins = "*", allowedHeaders="*". methods={RequestMethod.GET, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.POST})
 public class CustomerController {
 
     @Autowired
