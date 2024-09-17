@@ -86,4 +86,16 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getCustomers(pageable));
     }
 
+    /**
+     * Synchronize the customer list with an external source.
+     *
+     * @param token The JWT token for authorization.
+     * @return ResponseEntity with success message and status code.
+     * @throws CustomerNotFoundException if synchronization fails.
+     */
+    @PostMapping("/sync")
+    public ResponseEntity<?> syncCustomers(@RequestHeader("Authorization") String token) throws CustomerNotFoundException {
+        customerService.syncCustomers(token);
+        return ResponseEntity.ok("Customer list synchronized successfully");
+    }
 }

@@ -36,7 +36,7 @@ public class AuthController {
      * @param token The JWT token sent in the Authorization header.
      * @return ResponseEntity indicating if the user is allowed to access the sync functionality.
      */
-    @CrossOrigin(origins = "http://localhost:7080")
+    @CrossOrigin(origins = "*")
     @GetMapping("/verify-sync")
     public ResponseEntity<?> verifySyncAccess(@RequestHeader("Authorization") String token) {
         String username = jwtUtil.extractUsername(token.substring(7));
@@ -56,7 +56,7 @@ public class AuthController {
      * @param authRequest The authentication request containing username and password.
      * @return ResponseEntity containing the JWT token if authentication is successful.
      */
-    @CrossOrigin(origins = "http://localhost:7080")
+    @CrossOrigin(origins = "*")
     @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest authRequest) {
 
@@ -76,7 +76,7 @@ public class AuthController {
      * @param authRequest The registration request containing username and password.
      * @return ResponseEntity indicating successful registration.
      */
-    @CrossOrigin(origins = "http://localhost:7080")
+    @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest authRequest) {
 
