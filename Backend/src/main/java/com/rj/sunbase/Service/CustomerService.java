@@ -12,6 +12,5 @@ public interface CustomerService {
     public Page<Customer> getCustomers(Pageable pageable);
     public Customer getCustomerById(Long id) throws CustomerNotFoundException;
     public void deleteCustomer(Long id) throws CustomerNotFoundException;
-    public void syncCustomers(String token) throws CustomerNotFoundException;
 
 }

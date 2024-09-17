@@ -6,12 +6,8 @@ import com.rj.sunbase.Repository.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.http.HttpHeaders;
 import java.util.Optional;
 
 @Service
@@ -19,9 +15,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepo customerRepo;
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final String EXTERNAL_API_URL = "https://qa.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=get_customer_list";
-
 
     /**
      * @param customer
@@ -97,46 +90,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(Long id) throws CustomerNotFoundException {
 
-        if (!customerRepo.existsById(id))
+        if (!customerRepo.existsById(id)) {
             throw new CustomerNotFoundException("Customer not found with id: " + id);
-
-    }
-
-    /**
-     * Synchronize customers from an external API.
-     *
-     * @param token The authorization token to access the external API.
-     * @throws CustomerNotFoundException if there is an error fetching data from the external API.
-     */
-    public void syncCustomers(String token) throws CustomerNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<Customer[]> response = restTemplate.getForEntity(EXTERNAL_API_URL, Customer[].class, entity);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            Customer[] customers = response.getBody();
-            if (customers != null) {
-                for (Customer customer : customers) {
-                    Optional<Customer> existingCustomer = customerRepo.findByEmail(customer.getEmail());
-                    if (existingCustomer.isPresent()) {
-                        Customer updatedCustomer = existingCustomer.get();
-                        updatedCustomer.setFirstName(customer.getFirstName());
-                        updatedCustomer.setLastName(customer.getLastName());
-                        updatedCustomer.setStreet(customer.getStreet());
-                        updatedCustomer.setAddress(customer.getAddress());
-                        updatedCustomer.setCity(customer.getCity());
-                        updatedCustomer.setState(customer.getState());
-                        updatedCustomer.setPhone(customer.getPhone());
-                        customerRepo.save(updatedCustomer);
-                    } else {
-                        customerRepo.save(customer);
-                    }
-                }
-            }
-        } else {
-            throw new CustomerNotFoundException("Failed to fetch customer data from external API");
+        }
+        else{
+            customerRepo.deleteById(id);
         }
     }
 }

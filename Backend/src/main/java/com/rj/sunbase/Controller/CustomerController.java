@@ -9,11 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
-@CrossOrigin(origins = "", allowedHeaders = "", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class CustomerController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class CustomerController {
      * @return ResponseEntity with the created customer and status code.
      * @throws CustomerNotFoundException if customer creation fails.
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.createCustomer(customer));
     }
@@ -39,7 +39,7 @@ public class CustomerController {
      * @return ResponseEntity with the updated customer and status code.
      * @throws CustomerNotFoundException if the customer is not found.
      */
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
@@ -77,26 +77,13 @@ public class CustomerController {
      * @param sort The sorting criteria in the format "property,direction" (default is "id,asc").
      * @return ResponseEntity with a page of customers and status code.
      */
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<Page<Customer>> getCustomers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id,asc") String[] sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.by(sort[0]).with(Sort.Direction.fromString(sort[1]))));
         return ResponseEntity.ok(customerService.getCustomers(pageable));
-    }
-
-    /**
-     * Synchronize the customer list with an external source.
-     *
-     * @param token The JWT token for authorization.
-     * @return ResponseEntity with success message and status code.
-     * @throws CustomerNotFoundException if synchronization fails.
-     */
-    @PostMapping("/sync")
-    public ResponseEntity<?> syncCustomers(@RequestHeader("Authorization") String token) throws CustomerNotFoundException {
-        customerService.syncCustomers(token);
-        return ResponseEntity.ok("Customer list synchronized successfully");
     }
 
 }
