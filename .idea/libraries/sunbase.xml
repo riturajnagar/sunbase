@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="sunbase">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/sunbase.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
