@@ -51,7 +51,7 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
 
 4. **Access the Application:**
 
-   Open a browser and go to http://localhost:8088.
+   Open a browser and go to http://localhost:7080.
 
 
 ### API Endpoints
