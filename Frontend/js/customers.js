@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const token = localStorage.getItem('token');
     console.log(token);
-    const response = await fetch('http://localhost:7080/customers/get', {
+    const response = await fetch('http://localhost:7080/customers', {
+        method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
     });
-
+    
     if (response.ok) {
         const data = await response.json();
         const table = document.getElementById('customerTable').getElementsByTagName('tbody')[0];

@@ -12,7 +12,7 @@ document.getElementById('addCustomerForm').addEventListener('submit', async func
     };
 
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:7080/customers/create', {
+    const response = await fetch('http://localhost:7080/customers', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ document.getElementById('addCustomerForm').addEventListener('submit', async func
         },
         body: JSON.stringify(customer)
     });
-    console.log("response: ",response);
+    console.log("response: ", response);
     if (response.ok) {
         window.location.href = 'customers.html';
     } else {
