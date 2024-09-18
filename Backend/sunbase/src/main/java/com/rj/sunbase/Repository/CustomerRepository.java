@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.rj.sunbase.Model.Customer;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, String> {
 
 	Optional<Customer> findByEmail(String email);
 

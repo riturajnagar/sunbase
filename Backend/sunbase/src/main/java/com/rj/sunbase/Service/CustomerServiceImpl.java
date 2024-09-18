@@ -1,6 +1,8 @@
 package com.rj.sunbase.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +40,7 @@ public class CustomerServiceImpl implements CustomerServiceIntr{
 		if(customer == null) {
 			throw new CustomerNotFoundException("Customer Not found");
 		}
-		
+		customer.setUuid(""+UUID.randomUUID());
 		return customerRepository.save(customer);
 	}
 
@@ -51,10 +53,10 @@ public class CustomerServiceImpl implements CustomerServiceIntr{
      * @throws CustomerNotFoundException if no customer is found with the given ID.
      */
 	@Override
-	public Customer updateCustomer(Long id, Customer customer) throws CustomerNotFoundException {
+	public Customer updateCustomer(String id, Customer customer) throws CustomerNotFoundException {
 		 return customerRepository.findById(id).map(existingCustomer -> {
-	            existingCustomer.setFirstName(customer.getFirstName());
-	            existingCustomer.setLastName(customer.getLastName());
+	            existingCustomer.setFirst_name(customer.getFirst_name());
+	            existingCustomer.setLast_name(customer.getLast_name());
 	            existingCustomer.setStreet(customer.getStreet());
 	            existingCustomer.setAddress(customer.getAddress());
 	            existingCustomer.setCity(customer.getCity());
@@ -85,7 +87,7 @@ public class CustomerServiceImpl implements CustomerServiceIntr{
      * @throws CustomerNotFoundException if no customer is found with the given ID.
      */
 	@Override
-	public Customer getCustomerById(Long id) throws CustomerNotFoundException {
+	public Customer getCustomerById(String id) throws CustomerNotFoundException {
 		return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
 	}
@@ -97,7 +99,7 @@ public class CustomerServiceImpl implements CustomerServiceIntr{
      * @throws CustomerNotFoundException if no customer is found with the given ID.
      */
 	@Override
-	public void deleteCustomer(Long id) throws CustomerNotFoundException {
+	public void deleteCustomer(String id) throws CustomerNotFoundException {
 		if (!customerRepository.existsById(id)) {
             throw new CustomerNotFoundException("Customer not found with id: " + id);
         }
@@ -105,43 +107,10 @@ public class CustomerServiceImpl implements CustomerServiceIntr{
 		
 	}
 
-	/**
-	 * Synchronize customers from an external API.
-	 *
-	 * @param token The authorization token to access the external API.
-	 * @throws CustomerNotFoundException if there is an error fetching data from the external API.
-	 */
-	public void syncCustomers(String token) throws CustomerNotFoundException {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + token);
-
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		ResponseEntity<Customer[]> response = restTemplate.getForEntity(EXTERNAL_API_URL, Customer[].class, entity);
-
-		if (response.getStatusCode().is2xxSuccessful()) {
-			Customer[] customers = response.getBody();
-			if (customers != null) {
-				for (Customer customer : customers) {
-					Optional<Customer> existingCustomer = customerRepository.findByEmail(customer.getEmail());
-					if (existingCustomer.isPresent()) {
-						Customer updatedCustomer = existingCustomer.get();
-						updatedCustomer.setFirstName(customer.getFirstName());
-						updatedCustomer.setLastName(customer.getLastName());
-						updatedCustomer.setStreet(customer.getStreet());
-						updatedCustomer.setAddress(customer.getAddress());
-						updatedCustomer.setCity(customer.getCity());
-						updatedCustomer.setState(customer.getState());
-						updatedCustomer.setPhone(customer.getPhone());
-						customerRepository.save(updatedCustomer);
-					} else {
-						customerRepository.save(customer);
-					}
-				}
-			}
-		} else {
-			throw new CustomerNotFoundException("Failed to fetch customer data from external API");
-		}
+	@Override
+	public List<Customer> getCustomers() throws CustomerNotFoundException {
+		List<Customer> customers = customerRepository.findAll();
+		if(customers.size() == 0) throw new CustomerNotFoundException("No Customers Available");
+		return customers;
 	}
-
-
 }

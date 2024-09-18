@@ -1,8 +1,7 @@
 package com.rj.sunbase.Security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rj.sunbase.Model.Customer;
+import com.rj.sunbase.Service.SyncService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -15,10 +14,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -40,25 +40,19 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	/**
+	@Autowired
+	private SyncService syncService;
+
+    /**
 	 * Verify if the user has access to the sync functionality.
 	 *
 	 * @param token The JWT token sent in the Authorization header.
 	 * @return ResponseEntity indicating if the user is allowed to access the sync functionality.
 	 */
 	@CrossOrigin(origins = "http://localhost:8088")
-	@GetMapping("/verify-sync")
-	public ResponseEntity<?> verifySyncAccess(@RequestHeader("Authorization") String token) {
-		log.info("Verifying token sent in the Authorization header "+ token);
-		String username = jwtUtil.extractUsername(token.substring(7));
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-		// Check if the user is the allowed user
-		if (username.equals("test@sunbasedata.com")) {
-			return ResponseEntity.ok("User is allowed");
-		} else {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not allowed");
-		}
+	@GetMapping("/sync")
+	public ResponseEntity<List<Customer>> syncCustomerListToDatabase() {
+		return ResponseEntity.ok(syncService.syncCustomerListFromApi());
 	}
 
 	/**
@@ -98,53 +92,6 @@ public class AuthController {
 		return ResponseEntity.ok("User registered successfully");
 
 
-	}
-
-	@CrossOrigin(origins = "http://localhost:8088")
-	@GetMapping("/proxy-auth")
-	public ResponseEntity<?> proxyAuth() {
-		final String STATIC_LOGIN_ID = "test@sunbasedata.com";
-		final String STATIC_PASSWORD = "Test@123";
-		String url = "https://qa.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp";
-
-		RestTemplate restTemplate = new RestTemplate();
-
-		String jsonPayload = String.format("{\"login_id\":\"%s\",\"password\":\"%s\"}",
-				STATIC_LOGIN_ID, STATIC_PASSWORD);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "application/json");
-
-		HttpEntity<?> requestEntity = new HttpEntity<>(jsonPayload, headers);
-
-		log.info("ENTITY " + requestEntity.toString());
-
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
-				url,
-				HttpMethod.POST,
-				requestEntity,
-				String.class
-		);
-
-		log.info("RESULT " + responseEntity.getBody().toString());
-
-		String token = extractAccessToken(responseEntity.getBody());
-
-		log.info("Extracted Token: " + token);
-
-		return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-	}
-
-	private String extractAccessToken(String responseBody){
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode rootNode = objectMapper.readTree(responseBody);
-			return rootNode.path("access_token").asText();
-		}
-		catch (Exception e) {
-			log.error("Error parsing JSON: {}", e.getMessage());
-			throw new RuntimeException("Error parsing", e);
-		}
 	}
 
 	/**

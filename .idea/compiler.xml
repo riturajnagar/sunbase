@@ -10,10 +10,14 @@
         <module name="sunbase" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="sunbase (1)" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="sunbase" options="-parameters" />
+      <module name="sunbase (1)" options="-parameters" />
     </option>
   </component>
 </project>

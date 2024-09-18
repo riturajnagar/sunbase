@@ -37,21 +37,21 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
 
 2. **Configure the Application:**
 
-    Open src/main/resources/application.properties.
-    Set up the database connection properties:
+   Open src/main/resources/application.properties.
+   Set up the database connection properties:
 
-    spring.datasource.url=jdbc:mysql://localhost:3306/yourdatabase
-    spring.datasource.username=yourusername
-    spring.datasource.password=yourpassword
+   spring.datasource.url=jdbc:mysql://localhost:3306/yourdatabase
+   spring.datasource.username=yourusername
+   spring.datasource.password=yourpassword
 
 3. **Build and Run the Application:**
 
-    mvn clean install
-    mvn spring-boot:run
+   mvn clean install
+   mvn spring-boot:run
 
-4. **Access the Application:**    
+4. **Access the Application:**
 
-    Open a browser and go to http://localhost:8088.
+   Open a browser and go to http://localhost:8088.
 
 
 ## API Endpoints
@@ -72,11 +72,16 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
 ## SnapShots
 
 ### Register User:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/registeruser.PNG)
 
 ### Login Page:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/loginuser.PNG)
 
 ### Customer Dashboard:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/dashboard%201.PNG)
 
 ### Add Customer:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/addcustomer.PNG)
 
 ### Edit Customer:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/editcustomer.PNG)

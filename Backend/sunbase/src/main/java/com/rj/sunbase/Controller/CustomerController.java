@@ -21,6 +21,8 @@ import com.rj.sunbase.Exception.CustomerNotFoundException;
 import com.rj.sunbase.Model.Customer;
 import com.rj.sunbase.Service.CustomerServiceImpl;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -35,7 +37,7 @@ public class CustomerController {
      * @return ResponseEntity with the created customer and status code.
      * @throws CustomerNotFoundException if customer creation fails.
      */
-	@PostMapping("/create")
+	@PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.createCustomer(customer));
     }
@@ -49,10 +51,20 @@ public class CustomerController {
      * @throws CustomerNotFoundException if the customer is not found.
      */
     @PutMapping("/update/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) throws CustomerNotFoundException {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable String id, @RequestBody Customer customer) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
-    
+
+    /**
+     * Get a paginated and sorted list of customers.
+     *
+     * @return ResponseEntity with a page of customers and status code.
+     */
+    @GetMapping
+    public ResponseEntity<List<Customer>> getCustomers() throws CustomerNotFoundException {
+
+        return ResponseEntity.ok(customerService.getCustomers());
+    }
     /**
      * Get a paginated and sorted list of customers.
      * 
@@ -78,7 +90,7 @@ public class CustomerController {
      * @throws CustomerNotFoundException if the customer is not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) throws CustomerNotFoundException {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable String id) throws CustomerNotFoundException {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
     
@@ -90,22 +102,8 @@ public class CustomerController {
      * @throws CustomerNotFoundException if the customer is not found.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) throws CustomerNotFoundException {
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) throws CustomerNotFoundException {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
-    
-    /**
-     * Synchronize the customer list with an external source.
-     * 
-     * @param token The JWT token for authorization.
-     * @return ResponseEntity with success message and status code.
-     * @throws CustomerNotFoundException if synchronization fails.
-     */
-    @PostMapping("/sync")
-    public ResponseEntity<?> syncCustomers(@RequestHeader("Authorization") String token) throws CustomerNotFoundException {
-        customerService.syncCustomers(token);
-        return ResponseEntity.ok("Customer list synchronized successfully");
-    }
-
 }

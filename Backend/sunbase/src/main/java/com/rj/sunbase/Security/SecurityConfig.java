@@ -30,7 +30,7 @@ public class SecurityConfig  {
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http.csrf().disable()
 	            .authorizeRequests()
-	                .requestMatchers("/api/auth", "/api/register", "/api/proxy-auth", "/api/verify-sync").permitAll() // Allow unauthenticated access to login and register endpoints
+	                .requestMatchers("/api/auth", "/api/register", "/api/proxy-auth", "/api/sync").permitAll() // Allow unauthenticated access to login and register endpoints
 	                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Allow unauthenticated access to Swagger UI
 	                .anyRequest().authenticated() // All other endpoints require authentication
 	            .and()
