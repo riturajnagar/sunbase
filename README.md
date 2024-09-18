@@ -72,11 +72,16 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
 ## SnapShots
 
 ### Register User:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/registeruser.PNG)
 
 ### Login Page:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/loginuser.PNG)
 
 ### Customer Dashboard:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/dashboard%201.PNG)
 
 ### Add Customer:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/addcustomer.PNG)
 
 ### Edit Customer:
+![image](https://github.com/riturajnagar/sunbase/blob/main/Snapshots/editcustomer.PNG)
