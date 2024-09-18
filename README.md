@@ -54,14 +54,14 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
     Open a browser and go to http://localhost:8088.
 
 
-### API Endpoints
+## API Endpoints
 
-## Authentication:
+### Authentication:
 
 - POST /api/auth: Authenticate a user and get a JWT token.
 - POST /api/register: Register a new user.
 
-## Customer Management:
+### Customer Management:
 
 - POST /customers/create: Create a new customer.
 - PUT /customers/update/{id}: Update an existing customer.
@@ -69,3 +69,14 @@ This is a Customer Management CRUD (Create, Read, Update, Delete) application bu
 - GET /customers/{id}: Get a customer by ID.
 - DELETE /customers/{id}: Delete a customer.
 
+## SnapShots
+
+### Register User:
+
+### Login Page:
+
+### Customer Dashboard:
+
+### Add Customer:
+
+### Edit Customer:
